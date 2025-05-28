@@ -7,13 +7,13 @@
 
 import Foundation
 
-class CharactersRepository: CharactersRepositoryType {
+final class CharactersRepository: CharactersRepositoryType {
     
     private let apiDatasource: ApiDatasourceType
     private let charactersDomainMapper: CharactersDomainMapper
     private let errorMapper: CharactersDomainErrorMapper
 
-    var nextPage: String?
+    private var nextPage: String?
     
     init(apiDatasource: ApiDatasourceType, charactersDomainErrorMapper: CharactersDomainErrorMapper, charactersDomainMapper: CharactersDomainMapper) {
         self.apiDatasource = apiDatasource

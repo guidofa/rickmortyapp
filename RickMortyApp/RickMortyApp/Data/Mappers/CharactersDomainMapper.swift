@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CharactersDomainMapper {
+final class CharactersDomainMapper {
     func map(character: CharacterDTO) -> CharacterEntity {
         .init(
             id: character.id,

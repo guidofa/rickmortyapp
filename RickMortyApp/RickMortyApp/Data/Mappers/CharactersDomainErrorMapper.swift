@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CharactersDomainErrorMapper {
+final class CharactersDomainErrorMapper {
     func map(error: HTTPClientError?) -> CharactersDomainError {
         return .generic
     }

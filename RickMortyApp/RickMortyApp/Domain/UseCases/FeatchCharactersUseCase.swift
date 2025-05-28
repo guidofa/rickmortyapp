@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FeatchCharactersUseCase {
+final class FeatchCharactersUseCase {
     private let repository: CharactersRepositoryType
     
     init(repository: CharactersRepositoryType) {
