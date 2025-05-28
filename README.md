@@ -6,6 +6,7 @@ SwiftUI-based iOS app featuring Clean Architecture, infinite scrolling, image ca
 
 - Character
     id
+    gender
     imageURL
     name
     status
