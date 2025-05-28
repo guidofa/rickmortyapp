@@ -9,5 +9,4 @@ import Foundation
 
 struct PageInfoDTO: Codable {
     let next: String?
-    let prev: String?
 }

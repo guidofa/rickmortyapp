@@ -9,6 +9,7 @@ import Foundation
 
 final class ApiDataSource: ApiDatasourceType {
     private let httpClient: HTTPClient
+    private var firstPageHasBeenShown = false
 
     init(httpClient: HTTPClient) {
         self.httpClient = httpClient
@@ -22,6 +23,8 @@ final class ApiDataSource: ApiDatasourceType {
             baseUrl = nextPage
             endpoint = Endpoint(path: "", queryParameters: [:], method: .get)
         } else {
+            guard !firstPageHasBeenShown else { return .success(.init(results: [], info: .init(next: nil)))}
+            firstPageHasBeenShown = true
             baseUrl = "https://rickandmortyapi.com/api/"
             endpoint = Endpoint(path: "character", queryParameters: [:], method: .get)
         }
