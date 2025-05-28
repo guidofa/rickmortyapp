@@ -14,10 +14,19 @@ final class ApiDataSource: ApiDatasourceType {
         self.httpClient = httpClient
     }
     
-    func fetchCharacters() async -> Result<CharacterPageDTO, HTTPClientError> {
-        let endpoint = Endpoint(path: "character", queryParameters: [:], method: .get)
+    func fetchCharacters(nextPageUrl: String?) async -> Result<CharacterPageDTO, HTTPClientError> {
+        let baseUrl: String
+        let endpoint: Endpoint
 
-        let result = await httpClient.makeRequest(baseUrl: "https://rickandmortyapi.com/api/", endpoint: endpoint)
+        if let nextPage = nextPageUrl {
+            baseUrl = nextPage
+            endpoint = Endpoint(path: "", queryParameters: [:], method: .get)
+        } else {
+            baseUrl = "https://rickandmortyapi.com/api/"
+            endpoint = Endpoint(path: "character", queryParameters: [:], method: .get)
+        }
+        
+        let result = await httpClient.makeRequest(baseUrl: baseUrl, endpoint: endpoint)
 
         guard case .success(let data) = result else {
             guard case .failure(let error) = result else {

@@ -22,7 +22,7 @@ final class CharactersRepository: CharactersRepositoryType {
     }
     
     func fetchCharacters() async -> Result<[CharacterEntity], CharactersDomainError> {
-        let pageCharactersResult = await apiDatasource.fetchCharacters()
+        let pageCharactersResult = await apiDatasource.fetchCharacters(nextPageUrl: nextPage)
         
         guard case .success(let pageCharacters) = pageCharactersResult else {
             guard case .failure(let error) = pageCharactersResult else {

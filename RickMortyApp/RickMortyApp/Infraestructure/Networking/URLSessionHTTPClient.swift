@@ -24,6 +24,8 @@ final class URLSessionHTTPClient: HTTPClient {
         }
         
         do {
+            print("🔍 Fetching data from: \(url)")
+
             let result = try await session.data(from: url)
 
             guard let response = result.1 as? HTTPURLResponse else {
@@ -31,8 +33,11 @@ final class URLSessionHTTPClient: HTTPClient {
             }
 
             guard response.statusCode == 200 else {
+                print("❌ Error: \(response.statusCode)")
                 return .failure(errorResolver.resolve(statusCode: response.statusCode))
             }
+
+            print("✅ \(response.statusCode) Response: \(String(decoding: result.0, as: Unicode.UTF8.self))")
 
             return .success(result.0)
         } catch {

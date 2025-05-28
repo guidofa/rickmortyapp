@@ -6,5 +6,5 @@
 //
 
 protocol ApiDatasourceType {
-    func  fetchCharacters() async -> Result<CharacterPageDTO, HTTPClientError>
+    func  fetchCharacters(nextPageUrl: String?) async -> Result<CharacterPageDTO, HTTPClientError>
 }
