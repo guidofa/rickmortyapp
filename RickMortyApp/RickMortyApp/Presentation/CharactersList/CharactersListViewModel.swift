@@ -86,7 +86,7 @@ class CharactersListViewModel: ObservableObject {
 
     @MainActor
     private func setCharactersListToShow(_ charactersList: [CharacterUIModel]) {
-        charactersListToShow = charactersList
+        self.charactersListToShow.append(contentsOf: charactersList)
     }
 
     @MainActor

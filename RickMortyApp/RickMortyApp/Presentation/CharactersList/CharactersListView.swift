@@ -12,26 +12,32 @@ struct CharactersListView: View {
 
     init(viewModel: CharactersListViewModel) {
         self.viewModel = viewModel
+        Task { [weak viewModel] in
+            await viewModel?.trigger(.fetchCharacters)
+        }
     }
 
     var body: some View {
         VStack(spacing: .zero) {
-            if viewModel.state == .loading {
-                BaseProgressView()
-            } else if viewModel.state == .error {
+            if viewModel.state == .error {
                 Text("Error")
                     .foregroundColor(.red)
                     .font(.headline)
             } else {
                 List {
                     ForEach(viewModel.charactersListToShow) { character in
-                        Text(character.name)
+                        CharacterView(character: character)
+                    }
+
+                    Button {
+                        Task { [weak viewModel] in
+                            await viewModel?.trigger(.fetchCharacters)
+                        }
+                    } label: {
+                        Text("Cargar mas")
                     }
                 }
             }
-        }
-        .task { [weak viewModel] in
-            await viewModel?.trigger(.fetchCharacters)
         }
     }
 }

@@ -18,8 +18,14 @@ final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
 
-    func makeRequest(baseUrl: String, endpoint: Endpoint) async -> Result<Data, HTTPClientError> {
-        guard let url = requestMaker.url(baseUrl: baseUrl, endpoint: endpoint) else {
+    func makeRequest(directUrl: String?, endpoint: Endpoint) async -> Result<Data, HTTPClientError> {
+        let url: URL
+
+        if let direct = directUrl, let directURL = URL(string: direct) {
+            url = directURL
+        } else if let generatedURL = requestMaker.url(endpoint: endpoint) {
+            url = generatedURL
+        } else {
             return .failure(.badURL)
         }
         

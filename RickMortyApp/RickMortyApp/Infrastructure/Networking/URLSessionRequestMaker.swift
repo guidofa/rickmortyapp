@@ -8,8 +8,8 @@
 import Foundation
 
 final class URLSessionRequestMaker {
-    func url(baseUrl: String, endpoint: Endpoint) -> URL? {
-        var urlComponents = URLComponents(string: baseUrl + endpoint.path)
+    func url(endpoint: Endpoint) -> URL? {
+        var urlComponents = URLComponents(string: NetworkConstants.apiBaseURLString + endpoint.path)
         let urlQueryParameters = endpoint.queryParameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
 
         urlComponents?.queryItems = urlQueryParameters
