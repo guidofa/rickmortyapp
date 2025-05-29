@@ -1,5 +1,5 @@
 //
-//  FeatchCharactersUseCase.swift
+//  FetchCharactersUseCase.swift
 //  RickMortyApp
 //
 //  Created by Guido Fabio on 28/5/25.
@@ -7,7 +7,11 @@
 
 import Foundation
 
-final class FeatchCharactersUseCase {
+protocol FetchCharactersUseCaseType {
+    func execute() async -> Result<[CharacterEntity], CharactersDomainError>
+}
+
+final class FetchCharactersUseCase: FetchCharactersUseCaseType {
     private let repository: CharactersRepositoryType
     
     init(repository: CharactersRepositoryType) {

@@ -9,4 +9,5 @@ import Foundation
 
 enum CharactersDomainError: Error {
     case generic
+    case tooManyRequests
 }

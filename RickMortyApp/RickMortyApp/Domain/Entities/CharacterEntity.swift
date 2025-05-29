@@ -1,5 +1,5 @@
 //
-//  Character.swift
+//  CharacterEntity.swift
 //  RickMortyApp
 //
 //  Created by Guido Fabio on 28/5/25.

@@ -9,6 +9,7 @@ import Foundation
 
 final class ApiDataSource: ApiDatasourceType {
     private let httpClient: HTTPClient
+
     private var firstPageHasBeenShown = false
 
     init(httpClient: HTTPClient) {

@@ -11,7 +11,7 @@ import SwiftUI
 struct RickMortyAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CharactersListFactory.create()
         }
     }
 }
