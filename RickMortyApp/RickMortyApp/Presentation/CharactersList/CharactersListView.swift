@@ -17,16 +17,14 @@ struct CharactersListView: View {
     var body: some View {
         VStack(spacing: .zero) {
             if viewModel.state == .loading {
-                ProgressView()
-                    .controlSize(.large)
-                    .tint(.primary)
+                BaseProgressView()
             } else if viewModel.state == .error {
                 Text("Error")
                     .foregroundColor(.red)
                     .font(.headline)
             } else {
                 List {
-                    ForEach(viewModel.charactersListToShow, id: \.id) { character in
+                    ForEach(viewModel.charactersListToShow) { character in
                         Text(character.name)
                     }
                 }

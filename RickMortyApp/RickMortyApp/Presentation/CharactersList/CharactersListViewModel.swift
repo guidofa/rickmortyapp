@@ -20,6 +20,7 @@ class CharactersListViewModel: ObservableObject {
     }
 
     enum ViewState {
+        case blockingError
         case error
         case loaded
         case loading
@@ -55,7 +56,7 @@ class CharactersListViewModel: ObservableObject {
     // MARK: - Private functions
 
     private func fetchCharactersList() async {
-        await setLoadingState(state: .loading)
+        await setViewState(state: .loading)
 
         let result = await fetchCharactersUseCase.execute()
 
@@ -64,16 +65,21 @@ class CharactersListViewModel: ObservableObject {
             return
         }
         
-        await setLoadingState(state: .loaded)
+        await setViewState(state: .loaded)
 
         await setCharactersListToShow(charactersList.map { CharacterUIModel(domainModel: $0) })
     }
 
     private func handleError(error: CharactersDomainError?) async {
-        await setLoadingState(state: .error)
         // Poner en la ultima celda de el error seguido de un boton de reintentar.
         // showErrorMessage = charactersErrorUIMapper.map(error: error)
         // In main actor.
+        guard charactersListToShow.isEmpty else {
+            await setViewState(state: .blockingError)
+            return
+        }
+
+        await setViewState(state: .error)
     }
 
     // MARK: - MainActor methods
@@ -84,7 +90,7 @@ class CharactersListViewModel: ObservableObject {
     }
 
     @MainActor
-    private func setLoadingState(state: ViewState) {
+    private func setViewState(state: ViewState) {
         self.state = state
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CharacterUIModel {
+struct CharacterUIModel: Identifiable {
     let id: Int
     let imageURL: URL?
     let name: String
