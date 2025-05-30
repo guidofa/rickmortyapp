@@ -10,40 +10,40 @@ import Foundation
 final class ApiDataSource: ApiDatasourceType {
     private let httpClient: HTTPClient
 
-    private var firstPageHasBeenShown = false
-
     init(httpClient: HTTPClient) {
         self.httpClient = httpClient
     }
     
     func fetchCharacters(nextPageUrl: String?) async -> Result<CharacterPageDTO, HTTPClientError> {
-        let endpoint: Endpoint
-        var directUrl: String?
-
-        if let nextPage = nextPageUrl {
-            directUrl = nextPage
-            endpoint = Endpoint(path: "", queryParameters: [:], method: .get)
-        } else {
-            guard !firstPageHasBeenShown else { return .success(.init(results: [], info: .init(next: nil)))}
-            firstPageHasBeenShown = true
-            endpoint = Endpoint(path: "character", queryParameters: [:], method: .get)
-        }
-        
-        let result = await httpClient.makeRequest(directUrl: directUrl, endpoint: endpoint)
-
-        guard case .success(let data) = result else {
-            guard case .failure(let error) = result else {
-                return .failure(.generic)
-            }
-
-            return .failure(error)
-        }
-        
-        guard let charactersList = try? JSONDecoder().decode(CharacterPageDTO.self, from: data) else {
-            return .failure(.parsingError)
+        guard let url = nextPageUrl else {
+            return await fetchCharactersInitial()
         }
 
-        return .success(charactersList)
+        return await fetchCharacters(directUrl: url)
+    }
+    
+    private func fetchCharactersInitial() async -> Result<CharacterPageDTO, HTTPClientError> {
+        let endpoint = Endpoint(path: "character", queryParameters: [:], method: .get)
+        let result = await httpClient.makeRequest(directUrl: nil, endpoint: endpoint)
+        return handleResult(result)
     }
 
+    private func fetchCharacters(directUrl: String) async -> Result<CharacterPageDTO, HTTPClientError> {
+        let endpoint = Endpoint(path: "", queryParameters: [:], method: .get)
+        let result = await httpClient.makeRequest(directUrl: directUrl, endpoint: endpoint)
+        return handleResult(result)
+    }
+
+    private func handleResult(_ result: Result<Data, HTTPClientError>) -> Result<CharacterPageDTO, HTTPClientError> {
+        switch result {
+        case .success(let data):
+            if let page = try? JSONDecoder().decode(CharacterPageDTO.self, from: data) {
+                return .success(page)
+            } else {
+                return .failure(.parsingError)
+            }
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
 }

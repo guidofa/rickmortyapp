@@ -16,18 +16,16 @@ struct CharacterView: View {
 
             VStack(alignment: .leading, spacing: .smallPadding) {
                 Text(character.name)
-                    .foregroundStyle(.primary)
                     .font(.headline)
+
                 HStack(spacing: .smallPadding) {
                     Text(character.status.rawValue)
-                        .foregroundStyle(.primary)
-                        .font(.subheadline)
 
                     Text(character.gender)
-                        .foregroundStyle(.primary)
-                        .font(.subheadline)
                 }
+                .font(.subheadline)
             }
+            .foregroundStyle(.primary)
         }
     }
 }

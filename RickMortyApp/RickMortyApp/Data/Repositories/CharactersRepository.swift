@@ -14,7 +14,6 @@ final class CharactersRepository: CharactersRepositoryType {
     private let errorMapper: CharactersDomainErrorMapper
 
     private var nextPage: String?
-    private var isNotFirstRequest: Bool = false
     
     init(apiDatasource: ApiDatasourceType, charactersDomainErrorMapper: CharactersDomainErrorMapper, charactersDomainMapper: CharactersDomainMapper) {
         self.apiDatasource = apiDatasource
@@ -23,12 +22,7 @@ final class CharactersRepository: CharactersRepositoryType {
     }
     
     func fetchCharacters() async -> Result<[CharacterEntity], CharactersDomainError> {
-        if isNotFirstRequest && nextPage == nil {
-            return .failure(.isLastPage)
-        }
-
         let pageCharactersResult = await apiDatasource.fetchCharacters(nextPageUrl: nextPage)
-        isNotFirstRequest = true
         
         guard case .success(let pageCharacters) = pageCharactersResult else {
             guard case .failure(let error) = pageCharactersResult else {
@@ -37,8 +31,6 @@ final class CharactersRepository: CharactersRepositoryType {
 
             return .failure(errorMapper.map(error: error))
         }
-
-        self.nextPage = pageCharacters.info.next
 
         return .success(pageCharacters.results.map { charactersDomainMapper.map(character: $0) })
     }

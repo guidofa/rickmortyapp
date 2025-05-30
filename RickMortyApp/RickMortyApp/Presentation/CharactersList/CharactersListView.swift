@@ -8,48 +8,27 @@
 import SwiftUI
 
 struct CharactersListView: View {
-    @ObservedObject private var viewModel: CharactersListViewModel
-
-    init(viewModel: CharactersListViewModel) {
-        self.viewModel = viewModel
-        Task { [weak viewModel] in
-            await viewModel?.trigger(.fetchCharacters)
-        }
-    }
+    @ObservedObject var viewModel: CharactersListViewModel
 
     var body: some View {
-        VStack(spacing: .zero) {
-            if viewModel.state == .blockingError {
-                Text("Error")
-                    .foregroundColor(.red)
-                    .font(.headline)
-            } else {
-                List {
-                    ForEach(viewModel.charactersListToShow) { character in
-                        CharacterView(character: character)
-                    }
-
-                    switch viewModel.state {
-                    case .loading:
-                        BaseProgressView()
-                    case .error:
-                        Text("ERROR")
-
-                    case .lastPage:
-                        Text("Final de pagina")
-                        
-                    default:
-                        Button {
-                            Task { [weak viewModel] in
-                                await viewModel?.trigger(.fetchCharacters)
-                            }
-                        } label: {
-                            Text("Load more")
+        NavigationStack {
+            VStack(spacing: .zero) {
+                if viewModel.state == .blockingError {
+                    Text("Error")
+                        .foregroundColor(.red)
+                        .font(.headline)
+                } else {
+                    List {
+                        ForEach(viewModel.charactersListToShow) { character in
+                            CharacterView(character: character)
                         }
                     }
-                    
                 }
             }
+            .navigationTitle("Rick and Morty")
+        }
+        .task { [weak viewModel] in
+            await viewModel?.trigger(.fetchCharacters)
         }
     }
 }
