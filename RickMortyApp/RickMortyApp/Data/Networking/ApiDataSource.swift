@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol ApiDatasourceType {
+    func  fetchCharacters(nextPageUrl: String?) async -> Result<CharacterPageDTO, HTTPClientErrorEnum>
+}
+
 final class ApiDataSource: ApiDatasourceType {
     private let httpClient: HTTPClient
 
@@ -14,7 +18,7 @@ final class ApiDataSource: ApiDatasourceType {
         self.httpClient = httpClient
     }
     
-    func fetchCharacters(nextPageUrl: String?) async -> Result<CharacterPageDTO, HTTPClientError> {
+    func fetchCharacters(nextPageUrl: String?) async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
         guard let url = nextPageUrl else {
             return await fetchCharactersInitial()
         }
@@ -22,19 +26,19 @@ final class ApiDataSource: ApiDatasourceType {
         return await fetchCharacters(directUrl: url)
     }
     
-    private func fetchCharactersInitial() async -> Result<CharacterPageDTO, HTTPClientError> {
+    private func fetchCharactersInitial() async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
         let endpoint = Endpoint(path: "character", queryParameters: [:], method: .get)
         let result = await httpClient.makeRequest(directUrl: nil, endpoint: endpoint)
         return handleResult(result)
     }
 
-    private func fetchCharacters(directUrl: String) async -> Result<CharacterPageDTO, HTTPClientError> {
+    private func fetchCharacters(directUrl: String) async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
         let endpoint = Endpoint(path: "", queryParameters: [:], method: .get)
         let result = await httpClient.makeRequest(directUrl: directUrl, endpoint: endpoint)
         return handleResult(result)
     }
 
-    private func handleResult(_ result: Result<Data, HTTPClientError>) -> Result<CharacterPageDTO, HTTPClientError> {
+    private func handleResult(_ result: Result<Data, HTTPClientErrorEnum>) -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
         switch result {
         case .success(let data):
             if let page = try? JSONDecoder().decode(CharacterPageDTO.self, from: data) {

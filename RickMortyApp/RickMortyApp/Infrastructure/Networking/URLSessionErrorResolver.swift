@@ -8,11 +8,11 @@
 import Foundation
 
 final class URLSessionErrorResolver {
-    func resolve(error: Error) -> HTTPClientError {
+    func resolve(error: Error) -> HTTPClientErrorEnum {
         return .generic
     }
 
-    func resolve(statusCode: Int) -> HTTPClientError {
+    func resolve(statusCode: Int) -> HTTPClientErrorEnum {
         guard statusCode != 429 else {
             return .tooManyRequests
         }

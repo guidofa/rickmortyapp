@@ -12,6 +12,7 @@ extension Result {
         switch self {
             case .failure(let error):
                 return error
+
             case .success:
                 return nil
         }

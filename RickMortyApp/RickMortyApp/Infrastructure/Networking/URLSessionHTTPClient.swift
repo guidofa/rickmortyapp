@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol HTTPClient {
+    func makeRequest(directUrl: String?, endpoint: Endpoint) async -> Result<Data, HTTPClientErrorEnum>
+}
+
 final class URLSessionHTTPClient: HTTPClient {
     private let errorResolver: URLSessionErrorResolver
     private let requestMaker: URLSessionRequestMaker
@@ -18,7 +22,7 @@ final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
 
-    func makeRequest(directUrl: String?, endpoint: Endpoint) async -> Result<Data, HTTPClientError> {
+    func makeRequest(directUrl: String?, endpoint: Endpoint) async -> Result<Data, HTTPClientErrorEnum> {
         let url: URL
 
         if let direct = directUrl, let directURL = URL(string: direct) {

@@ -12,5 +12,5 @@ struct CharacterEntity {
     let gender: String
     let imageURL: URL?
     let name: String
-    let status: CharacterStatus
+    let status: CharacterStatusEnum
 }

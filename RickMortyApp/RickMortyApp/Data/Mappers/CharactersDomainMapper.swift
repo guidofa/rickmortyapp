@@ -14,7 +14,7 @@ final class CharactersDomainMapper {
             gender: character.gender,
             imageURL: URL(string: character.image),
             name: character.name,
-            status: CharacterStatus(rawValue: character.status) ?? .unknown
+            status: CharacterStatusEnum(rawValue: character.status) ?? .unknown
         )
     }
 }

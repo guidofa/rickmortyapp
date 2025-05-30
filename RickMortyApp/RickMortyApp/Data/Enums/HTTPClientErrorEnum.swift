@@ -1,5 +1,5 @@
 //
-//  HTTPClientError.swift
+//  HTTPClientErrorEnum.swift
 //  RickMortyApp
 //
 //  Created by Guido Fabio on 28/5/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum HTTPClientError: Error {
+enum HTTPClientErrorEnum: Error {
     case badURL
     case clientError
     case generic

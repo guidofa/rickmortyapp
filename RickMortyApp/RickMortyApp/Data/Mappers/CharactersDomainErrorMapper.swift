@@ -8,7 +8,7 @@
 import Foundation
 
 final class CharactersDomainErrorMapper {
-    func map(error: HTTPClientError?) -> CharactersDomainError {
+    func map(error: HTTPClientErrorEnum?) -> CharactersDomainError {
         guard error == .tooManyRequests else {
             return .generic
         }
