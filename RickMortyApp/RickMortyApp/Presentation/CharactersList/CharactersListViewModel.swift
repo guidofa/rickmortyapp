@@ -71,7 +71,7 @@ class CharactersListViewModel: ObservableObject {
     }
 
     private func handleError(error: CharactersDomainError?) async {
-        await setViewState(state: .error)
+        await setViewState(state: .blockingError)
     }
 
     // MARK: - MainActor methods

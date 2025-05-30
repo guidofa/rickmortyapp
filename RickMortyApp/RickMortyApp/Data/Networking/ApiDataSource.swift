@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ApiDatasourceType {
-    func  fetchCharacters(nextPageUrl: String?) async -> Result<CharacterPageDTO, HTTPClientErrorEnum>
+    func  fetchCharacters() async -> Result<CharacterPageDTO, HTTPClientErrorEnum>
 }
 
 final class ApiDataSource: ApiDatasourceType {
@@ -18,12 +18,8 @@ final class ApiDataSource: ApiDatasourceType {
         self.httpClient = httpClient
     }
     
-    func fetchCharacters(nextPageUrl: String?) async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
-        guard let url = nextPageUrl else {
-            return await fetchCharactersInitial()
-        }
-
-        return await fetchCharacters(directUrl: url)
+    func fetchCharacters() async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
+        return await fetchCharactersInitial()
     }
     
     private func fetchCharactersInitial() async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
@@ -41,11 +37,12 @@ final class ApiDataSource: ApiDatasourceType {
     private func handleResult(_ result: Result<Data, HTTPClientErrorEnum>) -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
         switch result {
         case .success(let data):
-            if let page = try? JSONDecoder().decode(CharacterPageDTO.self, from: data) {
-                return .success(page)
-            } else {
+            guard let page = try? JSONDecoder().decode(CharacterPageDTO.self, from: data) else {
                 return .failure(.parsingError)
             }
+
+            return .success(page)
+
         case .failure(let error):
             return .failure(error)
         }

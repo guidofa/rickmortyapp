@@ -13,8 +13,6 @@ final class CharactersRepository: CharactersRepositoryType {
     private let charactersDomainMapper: CharactersDomainMapper
     private let errorMapper: CharactersDomainErrorMapper
 
-    private var nextPage: String?
-    
     init(apiDatasource: ApiDatasourceType, charactersDomainErrorMapper: CharactersDomainErrorMapper, charactersDomainMapper: CharactersDomainMapper) {
         self.apiDatasource = apiDatasource
         self.charactersDomainMapper = charactersDomainMapper
@@ -22,14 +20,10 @@ final class CharactersRepository: CharactersRepositoryType {
     }
     
     func fetchCharacters() async -> Result<[CharacterEntity], CharactersDomainError> {
-        let pageCharactersResult = await apiDatasource.fetchCharacters(nextPageUrl: nextPage)
+        let pageCharactersResult = await apiDatasource.fetchCharacters()
         
         guard case .success(let pageCharacters) = pageCharactersResult else {
-            guard case .failure(let error) = pageCharactersResult else {
-                return .failure(.generic)
-            }
-
-            return .failure(errorMapper.map(error: error))
+            return .failure(errorMapper.map(error: pageCharactersResult.failureValue as? HTTPClientErrorEnum))
         }
 
         return .success(pageCharacters.results.map { charactersDomainMapper.map(character: $0) })

@@ -14,9 +14,11 @@ struct CharactersListView: View {
         NavigationStack {
             VStack(spacing: .zero) {
                 if viewModel.state == .blockingError {
-                    Text("Error")
-                        .foregroundColor(.red)
-                        .font(.headline)
+                    CharactersListBlockingErrorView {
+                        Task { [weak viewModel] in
+                            await viewModel?.trigger(.fetchCharacters)
+                        }
+                    }
                 } else {
                     List {
                         ForEach(viewModel.charactersListToShow) { character in

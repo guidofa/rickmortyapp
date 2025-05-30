@@ -50,7 +50,8 @@ final class URLSessionHTTPClient: HTTPClient {
             print("✅ \(response.statusCode) Response: \(String(decoding: result.0, as: Unicode.UTF8.self))")
 
             return .success(result.0)
-        } catch {
+        } catch(let error) {
+            print("❌ Error: \(error.localizedDescription)")
             return .failure(errorResolver.resolve(error: error))
         }
     }
