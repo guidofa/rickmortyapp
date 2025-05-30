@@ -22,6 +22,7 @@ class CharactersListViewModel: ObservableObject {
     enum ViewState {
         case blockingError
         case error
+        case lastPage
         case loaded
         case loading
     }
@@ -74,8 +75,13 @@ class CharactersListViewModel: ObservableObject {
         // Poner en la ultima celda de el error seguido de un boton de reintentar.
         // showErrorMessage = charactersErrorUIMapper.map(error: error)
         // In main actor.
-        guard charactersListToShow.isEmpty else {
+        guard !charactersListToShow.isEmpty else {
             await setViewState(state: .blockingError)
+            return
+        }
+
+        guard error != .isLastPage else {
+            await setViewState(state: .lastPage)
             return
         }
 

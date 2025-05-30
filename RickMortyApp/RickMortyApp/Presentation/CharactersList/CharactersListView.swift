@@ -19,7 +19,7 @@ struct CharactersListView: View {
 
     var body: some View {
         VStack(spacing: .zero) {
-            if viewModel.state == .error {
+            if viewModel.state == .blockingError {
                 Text("Error")
                     .foregroundColor(.red)
                     .font(.headline)
@@ -29,13 +29,25 @@ struct CharactersListView: View {
                         CharacterView(character: character)
                     }
 
-                    Button {
-                        Task { [weak viewModel] in
-                            await viewModel?.trigger(.fetchCharacters)
+                    switch viewModel.state {
+                    case .loading:
+                        BaseProgressView()
+                    case .error:
+                        Text("ERROR")
+
+                    case .lastPage:
+                        Text("Final de pagina")
+                        
+                    default:
+                        Button {
+                            Task { [weak viewModel] in
+                                await viewModel?.trigger(.fetchCharacters)
+                            }
+                        } label: {
+                            Text("Load more")
                         }
-                    } label: {
-                        Text("Cargar mas")
                     }
+                    
                 }
             }
         }
