@@ -7,16 +7,19 @@
 
 import Foundation
 
+private extension String {
+    static var genericErrorMessage: Self { "Something went wrong, please try again." }
+    static var tooManyRequest: Self { "Too many requests. Please, wait and try again later." }
+}
+
 final class CharactersErrorUIMapper {
     func map(error: CharactersDomainError?) -> String {
-        guard let error else { return "Something went wrong" }
-        
         switch error {
         case .tooManyRequests:
-            return "Too many requests. Please try again later."
+            return .tooManyRequest
 
         default:
-            return "Something went wrong"
+            return .genericErrorMessage
         }
     }
 }

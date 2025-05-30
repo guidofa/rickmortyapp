@@ -9,6 +9,5 @@ import Foundation
 
 enum CharactersDomainError: Error {
     case generic
-    case isLastPage
     case tooManyRequests
 }

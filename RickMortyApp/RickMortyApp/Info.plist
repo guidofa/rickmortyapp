@@ -4,10 +4,10 @@
 <dict>
 	<key>UILaunchScreen</key>
 	<dict>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
 		<key>UIImageName</key>
-		<string>launchscreen</string>
-		<key>UIColorName</key>
-		<string></string>
+		<string>logo</string>
 		<key>UILaunchScreen</key>
 		<dict/>
 	</dict>

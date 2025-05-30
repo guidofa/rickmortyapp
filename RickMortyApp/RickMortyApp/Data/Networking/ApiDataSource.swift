@@ -11,6 +11,11 @@ protocol ApiDatasourceType {
     func  fetchCharacters() async -> Result<CharacterPageDTO, HTTPClientErrorEnum>
 }
 
+private extension String {
+    static var character: Self { "character" }
+    static var empty: Self { "" }
+}
+
 final class ApiDataSource: ApiDatasourceType {
     private let httpClient: HTTPClient
 
@@ -23,13 +28,13 @@ final class ApiDataSource: ApiDatasourceType {
     }
     
     private func fetchCharactersInitial() async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
-        let endpoint = Endpoint(path: "character", queryParameters: [:], method: .get)
+        let endpoint = Endpoint(path: .character, queryParameters: [:], method: .get)
         let result = await httpClient.makeRequest(directUrl: nil, endpoint: endpoint)
         return handleResult(result)
     }
 
     private func fetchCharacters(directUrl: String) async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
-        let endpoint = Endpoint(path: "", queryParameters: [:], method: .get)
+        let endpoint = Endpoint(path: .empty, queryParameters: [:], method: .get)
         let result = await httpClient.makeRequest(directUrl: directUrl, endpoint: endpoint)
         return handleResult(result)
     }

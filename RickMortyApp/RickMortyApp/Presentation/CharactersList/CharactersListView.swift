@@ -7,14 +7,18 @@
 
 import SwiftUI
 
+private extension LocalizedStringKey {
+    static var appTitle: Self { "Rick and Morty" }
+}
+
 struct CharactersListView: View {
     @ObservedObject var viewModel: CharactersListViewModel
 
     var body: some View {
         NavigationStack {
             VStack(spacing: .zero) {
-                if viewModel.state == .blockingError {
-                    CharactersListBlockingErrorView {
+                if let errorMessage = viewModel.errorMessage {
+                    CharactersListBlockingErrorView(errorMessage: errorMessage) {
                         Task { [weak viewModel] in
                             await viewModel?.trigger(.fetchCharacters)
                         }
@@ -33,7 +37,7 @@ struct CharactersListView: View {
                     }
                 }
             }
-            .navigationTitle("Rick and Morty")
+            .navigationTitle(.appTitle)
         }
         .task { [weak viewModel] in
             await viewModel?.trigger(.fetchCharacters)

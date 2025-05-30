@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchCharactersUseCaseType {
-    func execute() async -> Result<[CharacterEntity], CharactersDomainError>
+    func execute() async -> Result<PageCharactersEntity, CharactersDomainError>
 }
 
 final class FetchCharactersUseCase: FetchCharactersUseCaseType {
@@ -18,7 +18,7 @@ final class FetchCharactersUseCase: FetchCharactersUseCaseType {
         self.repository = repository
     }
     
-    func execute() async -> Result<[CharacterEntity], CharactersDomainError> {
+    func execute() async -> Result<PageCharactersEntity, CharactersDomainError> {
         let result = await repository.fetchCharacters()
 
         guard let characters = try? result.get() else {

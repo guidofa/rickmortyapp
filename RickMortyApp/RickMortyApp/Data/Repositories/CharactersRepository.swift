@@ -13,19 +13,29 @@ final class CharactersRepository: CharactersRepositoryType {
     private let charactersDomainMapper: CharactersDomainMapper
     private let errorMapper: CharactersDomainErrorMapper
 
-    init(apiDatasource: ApiDatasourceType, charactersDomainErrorMapper: CharactersDomainErrorMapper, charactersDomainMapper: CharactersDomainMapper) {
+    init(
+        apiDatasource: ApiDatasourceType,
+        charactersDomainErrorMapper: CharactersDomainErrorMapper,
+        charactersDomainMapper: CharactersDomainMapper
+    ) {
         self.apiDatasource = apiDatasource
         self.charactersDomainMapper = charactersDomainMapper
         self.errorMapper = charactersDomainErrorMapper
     }
     
-    func fetchCharacters() async -> Result<[CharacterEntity], CharactersDomainError> {
+    func fetchCharacters() async -> Result<PageCharactersEntity, CharactersDomainError> {
         let pageCharactersResult = await apiDatasource.fetchCharacters()
         
         guard case .success(let pageCharacters) = pageCharactersResult else {
             return .failure(errorMapper.map(error: pageCharactersResult.failureValue as? HTTPClientErrorEnum))
         }
-
-        return .success(pageCharacters.results.map { charactersDomainMapper.map(character: $0) })
+        
+        return .success(
+            .init(
+                characters: pageCharacters.results.map { charactersDomainMapper.map(character: $0) },
+                next: pageCharacters.info.next,
+                prev: pageCharacters.info.prev
+            )
+        )
     }
 }

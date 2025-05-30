@@ -7,11 +7,12 @@
 
 import Foundation
 
-class CharactersListViewModel: ObservableObject {
+final class CharactersListViewModel: ObservableObject {
     // MARK: - Published vars
 
-    @Published var state = ViewState.loaded
     @Published var charactersListToShow = [CharacterUIModel]()
+    @Published var errorMessage: String?
+    @Published var state = ViewState.loaded
 
     // MARK: - Public Enums
 
@@ -20,7 +21,6 @@ class CharactersListViewModel: ObservableObject {
     }
 
     enum ViewState {
-        case blockingError
         case blockingLoading
         case error
         case loaded
@@ -48,6 +48,8 @@ class CharactersListViewModel: ObservableObject {
     // MARK: - Public Functions
 
     func trigger(_ action: TriggerAction) async {
+        await resetError()
+
         switch action {
         case .fetchCharacters:
             await fetchCharactersList()
@@ -61,21 +63,27 @@ class CharactersListViewModel: ObservableObject {
 
         let result = await fetchCharactersUseCase.execute()
 
-        guard case .success(let charactersList) = result else {
+        guard case .success(let page) = result else {
             await handleError(error: result.failureValue as? CharactersDomainError)
             return
         }
         
         await setViewState(state: .loaded)
 
-        await setCharactersListToShow(charactersList.map { CharacterUIModel(domainModel: $0) })
-    }
-
-    private func handleError(error: CharactersDomainError?) async {
-        await setViewState(state: .blockingError)
+        await setCharactersListToShow(page.characters.map { CharacterUIModel(domainModel: $0) })
     }
 
     // MARK: - MainActor methods
+
+    @MainActor
+    private func handleError(error: CharactersDomainError?) {
+        self.errorMessage = charactersErrorUIMapper.map(error: error)
+    }
+
+    @MainActor
+    private func resetError() {
+        self.errorMessage = nil
+    }
 
     @MainActor
     private func setCharactersListToShow(_ charactersList: [CharacterUIModel]) {
