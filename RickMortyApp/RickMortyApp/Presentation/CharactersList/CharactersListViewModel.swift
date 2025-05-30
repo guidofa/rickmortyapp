@@ -21,6 +21,7 @@ class CharactersListViewModel: ObservableObject {
 
     enum ViewState {
         case blockingError
+        case blockingLoading
         case error
         case loaded
         case loading

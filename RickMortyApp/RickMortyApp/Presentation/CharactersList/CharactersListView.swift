@@ -20,9 +20,15 @@ struct CharactersListView: View {
                         }
                     }
                 } else {
-                    List {
-                        ForEach(viewModel.charactersListToShow) { character in
-                            CharacterView(character: character)
+                    ZStack {
+                        List {
+                            ForEach(viewModel.charactersListToShow) { character in
+                                CharacterView(character: character)
+                            }
+                        }
+
+                        if viewModel.state == .blockingLoading {
+                            BaseProgressView()
                         }
                     }
                 }

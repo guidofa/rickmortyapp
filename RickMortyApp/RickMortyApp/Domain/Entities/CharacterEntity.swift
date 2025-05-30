@@ -9,7 +9,7 @@ import Foundation
 
 struct CharacterEntity {
     let id: Int
-    let gender: String
+    let gender: CharacterGenderEnum
     let imageURL: URL?
     let name: String
     let status: CharacterStatusEnum

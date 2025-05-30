@@ -12,20 +12,62 @@ struct CharacterView: View {
 
     var body: some View {
         HStack(spacing: .mediumPadding) {
-            CharacterProfilePic(imageURL: character.imageURL)
+            CharacterProfilePic(
+                imageURL: character.imageURL
+            )
+            
+            CharacterInfoView(
+                name: character.name,
+                gender: character.gender,
+                status: character.status
+            )
+        }
+    }
+}
 
-            VStack(alignment: .leading, spacing: .smallPadding) {
-                Text(character.name)
-                    .font(.headline)
+private struct CharacterInfoView: View {
+    let name: String
+    let gender: CharacterGenderEnum
+    let status: CharacterStatusEnum
 
-                HStack(spacing: .smallPadding) {
-                    Text(character.status.rawValue)
+    var body: some View {
+        VStack(alignment: .leading, spacing: .smallPadding) {
+            Text(name)
+                .font(.headline)
 
-                    Text(character.gender)
-                }
-                .font(.subheadline)
+            HStack(spacing: .mediumPadding) {
+                Circle()
+                    .fill(getStatusColor(status: status))
+                    .frame(width: .mediumPadding, height: .mediumPadding)
+                
+                Text(status.rawValue.capitalized)
+
+                Text(getGenderIcon(gender: gender))
+                    .foregroundColor(.primary)
+                    .font(.subheadline)
             }
-            .foregroundStyle(.primary)
+            .font(.caption)
+        }
+        .foregroundStyle(.primary)
+    }
+
+    private func getStatusColor(status: CharacterStatusEnum) -> Color {
+        switch status {
+        case .alive:
+            return .green
+        case .dead:
+            return .red
+        case .unknown:
+            return .gray
+        }
+    }
+
+    private func getGenderIcon(gender: CharacterGenderEnum) -> String {
+        switch gender {
+        case .female: return "♀︎"
+        case .genderless: return "⚲"
+        case .male: return "♂︎"
+        case .unknown: return "?"
         }
     }
 }
@@ -60,7 +102,7 @@ private struct CharacterProfilePic: View {
         character: .init(
             domainModel: .init(
                 id: 0,
-                gender: "male",
+                gender: .male,
                 imageURL: URL(string: "https://rickandmortyapi.com/api/character/avatar/361.jpeg"),
                 name: "Rick Sanchez",
                 status: .alive

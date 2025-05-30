@@ -12,7 +12,7 @@ struct CharacterUIModel: Identifiable {
     let imageURL: URL?
     let name: String
     let status: CharacterStatusEnum
-    let gender: String
+    let gender: CharacterGenderEnum
 
     init(domainModel: CharacterEntity) {
         self.id = domainModel.id
@@ -21,4 +21,6 @@ struct CharacterUIModel: Identifiable {
         self.status = domainModel.status
         self.gender = domainModel.gender
     }
+
+    
 }

@@ -11,7 +11,7 @@ final class CharactersDomainMapper {
     func map(character: CharacterDTO) -> CharacterEntity {
         .init(
             id: character.id,
-            gender: character.gender,
+            gender: CharacterGenderEnum(rawValue: character.gender) ?? .unknown,
             imageURL: URL(string: character.image),
             name: character.name,
             status: CharacterStatusEnum(rawValue: character.status) ?? .unknown
