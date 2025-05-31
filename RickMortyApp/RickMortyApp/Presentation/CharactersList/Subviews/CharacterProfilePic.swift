@@ -8,11 +8,6 @@
 import Kingfisher
 import SwiftUI
 
-private extension CGFloat {
-    static var overlayLineWidth: Self { 1 }
-    static var profilePicDiameter: Self { 60 }
-}
-
 struct CharacterProfilePic: View {
     let imageURL: URL?
 

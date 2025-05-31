@@ -18,11 +18,3 @@ extension Result {
         }
     }
 }
-
-extension CGFloat {
-    static var smallPadding: Self { 4 }
-    static var mediumPadding: Self { 8 }
-    static var defaultPadding: Self { 12 }
-    static var largePadding: Self { 16 }
-    static var extraLargePadding: Self { 32 }
-}

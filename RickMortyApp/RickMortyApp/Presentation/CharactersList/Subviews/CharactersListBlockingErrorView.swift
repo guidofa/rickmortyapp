@@ -36,14 +36,14 @@ struct CharactersListBlockingErrorView: View {
             Button(action: buttonAction) {
                 Text(.retry)
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.largePadding)
-                    .background(Color.black)
+                    .background(.secondary)
                     .cornerRadius(.cornerRadius)
             }
         }
-        .padding(.mediumPadding)
+        .padding(.largePadding)
     }
 }
 

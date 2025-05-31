@@ -31,6 +31,7 @@
 		C50261922DE76C73008A1EB2 /* RickMortyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickMortyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C50261A22DE76C74008A1EB2 /* RickMortyAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RickMortyAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C50261AC2DE76C74008A1EB2 /* RickMortyAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RickMortyAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5E98B812DEB527900276457 /* RickMortyAppTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RickMortyAppTests.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -55,11 +56,6 @@
 		C50261A52DE76C74008A1EB2 /* RickMortyAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RickMortyAppTests;
-			sourceTree = "<group>";
-		};
-		C50261AF2DE76C74008A1EB2 /* RickMortyAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RickMortyAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -93,9 +89,9 @@
 		C50261892DE76C73008A1EB2 = {
 			isa = PBXGroup;
 			children = (
+				C5E98B812DEB527900276457 /* RickMortyAppTests.xctestplan */,
 				C50261942DE76C73008A1EB2 /* RickMortyApp */,
 				C50261A52DE76C74008A1EB2 /* RickMortyAppTests */,
-				C50261AF2DE76C74008A1EB2 /* RickMortyAppUITests */,
 				C50261932DE76C73008A1EB2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -171,9 +167,6 @@
 			);
 			dependencies = (
 				C50261AE2DE76C74008A1EB2 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				C50261AF2DE76C74008A1EB2 /* RickMortyAppUITests */,
 			);
 			name = RickMortyAppUITests;
 			packageProductDependencies = (

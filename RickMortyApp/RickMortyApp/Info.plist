@@ -8,8 +8,6 @@
 		<true/>
 		<key>UIImageName</key>
 		<string>logo</string>
-		<key>UILaunchScreen</key>
-		<dict/>
 	</dict>
 </dict>
 </plist>

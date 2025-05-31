@@ -41,23 +41,20 @@ struct CharacterInfoView: View {
         .padding(.horizontal, .smallPadding)
     }
 
-    private func getStatusColor(status: CharacterStatusEnum) -> Color {
-        switch status {
-        case .alive:
-            return .green
-        case .dead:
-            return .red
-        case .unknown:
-            return .gray
-        }
-    }
-
     private func getGenderIcon(gender: CharacterGenderEnum) -> String {
         switch gender {
         case .female: return .genderIconFemale
         case .genderless: return .genderlessIcon
         case .male: return .genderIconMale
         case .unknown: return .genderUnknownIcon
+        }
+    }
+
+    private func getStatusColor(status: CharacterStatusEnum) -> Color {
+        switch status {
+        case .alive: return .green
+        case .dead: return .red
+        case .unknown: return .gray
         }
     }
 }

@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "3CDDB698-DD30-422B-8498-43F2B0586B50",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:RickMortyApp.xcodeproj",
+        "identifier" : "C50261A12DE76C74008A1EB2",
+        "name" : "RickMortyAppTests"
+      }
+    }
+  ],
+  "version" : 1
+}

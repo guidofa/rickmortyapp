@@ -12,12 +12,15 @@ final class FetchCharactersUseCaseTests: XCTestCase {
     
     var mockCharactersRepository: MockCharactersRepository!
 
-    var sut: FetchCharactersUseCaseType!
+    var sut: FetchCharactersUseCase!
     
     override func setUpWithError() throws {
         self.mockCharactersRepository = MockCharactersRepository()
 
-        self.sut = FetchCharactersUseCase(repository: mockCharactersRepository)
+        self.sut = FetchCharactersUseCase(
+            charactersDomainErrorMapper: .init(),
+            repository: mockCharactersRepository
+        )
     }
 
     override func tearDownWithError() throws {
@@ -26,7 +29,7 @@ final class FetchCharactersUseCaseTests: XCTestCase {
         self.sut = nil
     }
     
-    func test_execute_CallsRepositoryAndReturnsSuccess() async {
+    func test_execute_callsRepositoryAndReturnsSuccess() async {
         // When
         let result = await sut.execute()
         guard case .success(let page) = result else {
@@ -36,14 +39,17 @@ final class FetchCharactersUseCaseTests: XCTestCase {
         
         // Then
         XCTAssertTrue(mockCharactersRepository.fetchCharactersCalled, "Expected fetchCharacters() to be called")
-        XCTAssertEqual(page.characters, [])
+        XCTAssertEqual(page.characters, [], "Expected [] characters")
     }
 
-    func test_execute_WhenRepositoryFails_PropagatesFailure() async {
+    func test_execute_whenRepositoryFails_propagatesFailure() async {
         // Given
         let failureMock = MockCharactersRepositoryFailure()
         failureMock.failureError = .generic
-        sut = FetchCharactersUseCase(repository: failureMock)
+        sut = FetchCharactersUseCase(
+            charactersDomainErrorMapper: .init(),
+            repository: failureMock
+        )
 
         // When
         let result = await sut.execute()
