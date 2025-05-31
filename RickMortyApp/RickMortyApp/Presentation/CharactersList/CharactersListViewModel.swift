@@ -10,7 +10,7 @@ import Foundation
 final class CharactersListViewModel: ObservableObject {
     // MARK: - Published vars
 
-    @Published var charactersListToShow = [CharacterUIModel]()
+    @Published var charactersListToShow = [CharacterEntity]()
     @Published var errorMessage: String?
     @Published var state = ViewState.loaded
 
@@ -70,7 +70,7 @@ final class CharactersListViewModel: ObservableObject {
         
         await setViewState(state: .loaded)
 
-        await setCharactersListToShow(page.characters.map { CharacterUIModel(domainModel: $0) })
+        await setCharactersListToShow(page.characters.map { $0 })
     }
 
     // MARK: - MainActor methods
@@ -86,7 +86,7 @@ final class CharactersListViewModel: ObservableObject {
     }
 
     @MainActor
-    private func setCharactersListToShow(_ charactersList: [CharacterUIModel]) {
+    private func setCharactersListToShow(_ charactersList: [CharacterEntity]) {
         self.charactersListToShow.append(contentsOf: charactersList)
     }
 

@@ -9,7 +9,7 @@ import Kingfisher
 import SwiftUI
 
 struct CharacterView: View {
-    let character: CharacterUIModel
+    let character: CharacterEntity
 
     var body: some View {
         HStack(spacing: .mediumPadding) {
@@ -29,13 +29,11 @@ struct CharacterView: View {
 #Preview {
     CharacterView(
         character: .init(
-            domainModel: .init(
-                id: 0,
-                gender: .male,
-                imageURL: URL(string: "https://rickandmortyapi.com/api/character/avatar/361.jpeg"),
-                name: "Rick Sanchez",
-                status: .alive
-            )
+            id: 0,
+            gender: .male,
+            imageURL: nil,
+            name: "Rick",
+            status: .alive
         )
     )
 }
