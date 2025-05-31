@@ -7,10 +7,6 @@
 
 import Foundation
 
-protocol HTTPClient {
-    func makeRequest(directUrl: String?, endpoint: Endpoint) async -> Result<Data, HTTPClientErrorEnum>
-}
-
 final class URLSessionHTTPClient: HTTPClient {
     private let errorResolver: URLSessionErrorResolver
     private let requestMaker: URLSessionRequestMaker
@@ -52,7 +48,7 @@ final class URLSessionHTTPClient: HTTPClient {
             return .success(result.0)
         } catch(let error) {
             print("❌ Error: \(error.localizedDescription)")
-            return .failure(errorResolver.resolve(error: error))
+            return .failure(.generic)
         }
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 private extension LocalizedStringKey {
     static var appTitle: Self { "Rick and Morty" }
+    static var emptyStateMessage: Self { "There are no characters to show" }
 }
 
 struct CharactersListView: View {
@@ -25,14 +26,20 @@ struct CharactersListView: View {
                     }
                 } else {
                     ZStack {
-                        List {
-                            ForEach(viewModel.charactersListToShow) { character in
-                                CharacterView(character: character)
+                        if viewModel.charactersListToShow.isEmpty {
+                            Text(.emptyStateMessage)
+                                .foregroundStyle(.primary)
+                                .font(.headline)
+                        } else {
+                            List {
+                                ForEach(viewModel.charactersListToShow) { character in
+                                    CharacterView(character: character)
+                                }
                             }
-                        }
 
-                        if viewModel.state == .blockingLoading {
-                            BaseProgressView()
+                            if viewModel.state == .blockingLoading {
+                                BaseProgressView()
+                            }
                         }
                     }
                 }
@@ -50,6 +57,7 @@ struct CharactersListView: View {
         viewModel: CharactersListViewModel(
             charactersErrorUIMapper: .init(),
             fetchCharactersUseCase: FetchCharactersUseCase(
+                charactersDomainErrorMapper: .init(),
                 repository: CharactersRepository(
                     apiDatasource: ApiDataSource(
                         httpClient: URLSessionHTTPClient(

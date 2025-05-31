@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CharacterEntity {
+struct CharacterEntity: Equatable {
     let id: Int
     let gender: CharacterGenderEnum
     let imageURL: URL?

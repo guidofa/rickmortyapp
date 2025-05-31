@@ -7,10 +7,6 @@
 
 import Foundation
 
-protocol ApiDatasourceType {
-    func  fetchCharacters() async -> Result<CharacterPageDTO, HTTPClientErrorEnum>
-}
-
 private extension String {
     static var character: Self { "character" }
     static var empty: Self { "" }

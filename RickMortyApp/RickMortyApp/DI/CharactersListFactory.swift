@@ -23,6 +23,7 @@ final class CharactersListFactory {
 
     private static func createUseCase() -> FetchCharactersUseCase {
         return FetchCharactersUseCase(
+            charactersDomainErrorMapper: .init(),
             repository: createRepository()
         )
     }

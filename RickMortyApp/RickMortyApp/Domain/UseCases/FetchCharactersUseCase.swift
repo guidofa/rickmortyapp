@@ -12,9 +12,14 @@ protocol FetchCharactersUseCaseType {
 }
 
 final class FetchCharactersUseCase: FetchCharactersUseCaseType {
+    private let charactersDomainErrorMapper: CharactersDomainErrorMapper
     private let repository: CharactersRepositoryType
     
-    init(repository: CharactersRepositoryType) {
+    init(
+        charactersDomainErrorMapper: CharactersDomainErrorMapper,
+        repository: CharactersRepositoryType
+    ) {
+        self.charactersDomainErrorMapper = charactersDomainErrorMapper
         self.repository = repository
     }
     
@@ -22,11 +27,7 @@ final class FetchCharactersUseCase: FetchCharactersUseCaseType {
         let result = await repository.fetchCharacters()
 
         guard let characters = try? result.get() else {
-            guard case .failure(let error) = result else {
-                return .failure(.generic)
-            }
-
-            return .failure(error)
+            return .failure(charactersDomainErrorMapper.map(error: result.failureValue as? HTTPClientErrorEnum))
         }
 
         return .success(characters)

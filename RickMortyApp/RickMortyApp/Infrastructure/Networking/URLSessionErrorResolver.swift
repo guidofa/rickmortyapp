@@ -8,18 +8,16 @@
 import Foundation
 
 final class URLSessionErrorResolver {
-    func resolve(error: Error) -> HTTPClientErrorEnum {
-        return .generic
-    }
-
     func resolve(statusCode: Int) -> HTTPClientErrorEnum {
-        guard statusCode != 429 else {
+        switch statusCode {
+        case 429:
             return .tooManyRequests
-        }
-        guard statusCode < 500 else {
+        case 400..<500:
             return .clientError
+        case 500..<600:
+            return .serverError
+        default:
+            return .generic
         }
-
-        return .serverError
     }
 }

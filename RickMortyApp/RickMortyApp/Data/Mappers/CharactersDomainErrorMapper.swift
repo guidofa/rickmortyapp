@@ -9,10 +9,12 @@ import Foundation
 
 final class CharactersDomainErrorMapper {
     func map(error: HTTPClientErrorEnum?) -> CharactersDomainError {
-        guard error == .tooManyRequests else {
+        switch error {
+        case .tooManyRequests:
+            return .tooManyRequests
+
+        default:
             return .generic
         }
-
-        return .tooManyRequests
     }
 }
