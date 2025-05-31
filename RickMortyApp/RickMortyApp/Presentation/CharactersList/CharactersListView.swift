@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+private extension Double {
+    static var opacity: Self { 0.3 }
+}
+
 private extension LocalizedStringKey {
     static var appTitle: Self { "Rick and Morty" }
     static var emptyStateMessage: Self { "There are no characters to show" }
@@ -25,19 +29,22 @@ struct CharactersListView: View {
                         }
                     }
                 } else {
-                    ZStack {
-                        if viewModel.charactersListToShow.isEmpty {
-                            Text(.emptyStateMessage)
-                                .foregroundStyle(.primary)
-                                .font(.headline)
-                        } else {
+                    if viewModel.charactersListToShow.isEmpty {
+                        Text(.emptyStateMessage)
+                            .foregroundStyle(.primary)
+                            .font(.headline)
+                    } else {
+                        ZStack {
                             List {
                                 ForEach(viewModel.charactersListToShow) { character in
                                     CharacterView(character: character)
                                 }
                             }
+                            
+                            if viewModel.state == .loading {
+                                Color.black.opacity(.opacity)
+                                    .ignoresSafeArea()
 
-                            if viewModel.state == .blockingLoading {
                                 BaseProgressView()
                             }
                         }
