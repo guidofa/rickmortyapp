@@ -12,10 +12,12 @@ final class CharactersListViewModel: ObservableObject {
 
     @Published var charactersListToShow = [CharacterEntity]()
     @Published var errorMessage: String?
+    @Published var isLastPage: Bool = false
     @Published var state = ViewState.loaded
 
     private var nextPage: String?
     private var characters = [CharacterEntity]()
+    private var prevPage: String?
 
     // MARK: - Public Enums
 
@@ -76,6 +78,11 @@ final class CharactersListViewModel: ObservableObject {
 
         self.characters.append(contentsOf: page.characters)
         self.nextPage = page.next
+        self.prevPage = page.prev
+
+        if nextPage == nil && prevPage != nil {
+            await setIsLastPage()
+        }
         
         await setViewState(state: .loaded)
 
@@ -101,6 +108,11 @@ final class CharactersListViewModel: ObservableObject {
     }
 
     // MARK: - MainActor methods
+
+    @MainActor
+    private func setIsLastPage() {
+        self.isLastPage = true
+    }
 
     @MainActor
     private func handleError(error: CharactersDomainError?) {
