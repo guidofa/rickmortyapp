@@ -14,10 +14,13 @@ private extension Double {
 private extension LocalizedStringKey {
     static var appTitle: Self { "Rick and Morty" }
     static var emptyStateMessage: Self { "There are no characters to show" }
+    static var searchPlaceholder: Self { "Search Characters" }
 }
 
 struct CharactersListView: View {
     @ObservedObject var viewModel: CharactersListViewModel
+
+    @State private var searchText: String = ""
 
     var body: some View {
         NavigationStack {
@@ -29,13 +32,22 @@ struct CharactersListView: View {
                         }
                     }
                 } else {
-                    if viewModel.charactersListToShow.isEmpty {
-                        Text(.emptyStateMessage)
-                            .foregroundStyle(.primary)
-                            .font(.headline)
-                    } else {
-                        ZStack {
-                            List {
+                    ZStack {
+                        List {
+                            SearchView(
+                                searchText: $searchText,
+                                placeholder: .searchPlaceholder
+                            ) {
+                                Task { [weak viewModel] in
+                                    await viewModel?.trigger(.searchCharacter(searchText))
+                                }
+                            }
+
+                            if viewModel.charactersListToShow.isEmpty {
+                                Text(.emptyStateMessage)
+                                    .foregroundStyle(.primary)
+                                    .font(.headline)
+                            }  else {
                                 ForEach(viewModel.charactersListToShow) { character in
                                     CharacterView(character: character)
                                 }
@@ -46,13 +58,15 @@ struct CharactersListView: View {
                                     }
                                 }
                             }
-                            
-                            if viewModel.state == .loading {
-                                Color.black.opacity(.opacity)
-                                    .ignoresSafeArea()
+                        }
+                        .listStyle(.plain)
+                        .scrollDismissesKeyboard(.immediately)
+                        
+                        if viewModel.state == .loading {
+                            Color.black.opacity(.opacity)
+                                .ignoresSafeArea()
 
-                                BaseProgressView()
-                            }
+                            BaseProgressView()
                         }
                     }
                 }

@@ -15,11 +15,13 @@ final class CharactersListViewModel: ObservableObject {
     @Published var state = ViewState.loaded
 
     private var nextPage: String?
+    private var characters = [CharacterEntity]()
 
     // MARK: - Public Enums
 
     enum TriggerAction {
         case fetchCharacters
+        case searchCharacter(String)
     }
 
     enum ViewState {
@@ -54,6 +56,9 @@ final class CharactersListViewModel: ObservableObject {
         switch action {
         case .fetchCharacters:
             await fetchCharactersList()
+
+        case .searchCharacter(let searchText):
+            await searchCharacter(searchText: searchText)
         }
     }
 
@@ -69,11 +74,30 @@ final class CharactersListViewModel: ObservableObject {
             return
         }
 
+        self.characters.append(contentsOf: page.characters)
         self.nextPage = page.next
         
         await setViewState(state: .loaded)
 
-        await setCharactersListToShow(page.characters.map { $0 })
+        await setCharactersListToShow(characters)
+    }
+
+    private func searchCharacter(searchText: String) async {
+        guard !searchText.isEmpty else {
+            await setCharactersListToShow(characters)
+            return
+        }
+
+        let cleanedSearchText = searchText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let filteredList = characters.filter {
+            $0.name
+                .folding(options: .diacriticInsensitive, locale: .current)
+                .lowercased()
+                .contains(cleanedSearchText)
+        }
+        
+        await setCharactersListToShow(filteredList)
     }
 
     // MARK: - MainActor methods
@@ -90,7 +114,7 @@ final class CharactersListViewModel: ObservableObject {
 
     @MainActor
     private func setCharactersListToShow(_ charactersList: [CharacterEntity]) {
-        self.charactersListToShow.append(contentsOf: charactersList)
+        self.charactersListToShow = charactersList
     }
 
     @MainActor
