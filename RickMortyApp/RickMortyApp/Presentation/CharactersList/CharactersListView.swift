@@ -52,7 +52,7 @@ struct CharactersListView: View {
                                     CharacterView(character: character)
                                 }
 
-                                if !viewModel.isLastPage {
+                                if !viewModel.isLastPage && searchText.isEmpty {
                                     CharactersLoadMoreView {
                                         Task { [weak viewModel] in
                                             await viewModel?.trigger(.fetchCharacters)
