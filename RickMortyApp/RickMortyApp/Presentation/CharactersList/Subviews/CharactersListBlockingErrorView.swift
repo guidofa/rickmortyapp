@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-private extension CGFloat {
-    static var cornerRadius: Self { 8 }
-}
-
 private extension LocalizedStringKey {
     static var retry: Self { "Try again" }
 }
@@ -39,8 +35,12 @@ struct CharactersListBlockingErrorView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.largePadding)
-                    .background(.secondary)
-                    .cornerRadius(.cornerRadius)
+                    .background(Color.blue)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: .cornerRadius)
+                            .stroke(Color.black, lineWidth: 1)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: .cornerRadius))
             }
         }
         .padding(.largePadding)

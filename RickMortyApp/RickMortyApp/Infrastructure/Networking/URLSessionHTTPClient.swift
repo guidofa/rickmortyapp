@@ -18,14 +18,8 @@ final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
 
-    func makeRequest(directUrl: String?, endpoint: Endpoint) async -> Result<Data, HTTPClientErrorEnum> {
-        let url: URL
-
-        if let direct = directUrl, let directURL = URL(string: direct) {
-            url = directURL
-        } else if let generatedURL = requestMaker.url(endpoint: endpoint) {
-            url = generatedURL
-        } else {
+    func makeRequest(directUrl: String?, endpoint: Endpoint?) async -> Result<Data, HTTPClientErrorEnum> {
+        guard let url = resolveURL(directUrl: directUrl, endpoint: endpoint) else {
             return .failure(.badURL)
         }
         
@@ -50,5 +44,17 @@ final class URLSessionHTTPClient: HTTPClient {
             print("❌ Error: \(error.localizedDescription)")
             return .failure(.generic)
         }
+    }
+
+    private func resolveURL(directUrl: String?, endpoint: Endpoint?) -> URL? {
+        if let direct = directUrl, let directURL = URL(string: direct) {
+            return directURL
+        }
+
+        if let endpoint {
+            return requestMaker.url(endpoint: endpoint)
+        }
+
+        return nil
     }
 }

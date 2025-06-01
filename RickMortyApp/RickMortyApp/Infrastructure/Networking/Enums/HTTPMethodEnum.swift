@@ -9,5 +9,4 @@ import Foundation
 
 enum HTTPMethodEnum {
     case get
-    case post
 }

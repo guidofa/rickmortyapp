@@ -8,5 +8,5 @@
 import Foundation
 
 struct AppConstants {
-    static let apiBaseURLString = "https://rickandmortyapi.com/api/"
+    static let apiBaseURLString = "https://mortyapi.com/api/"
 }

@@ -20,18 +20,8 @@ final class ApiDataSource: ApiDatasourceType {
     }
     
     func fetchCharacters() async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
-        return await fetchCharactersInitial()
-    }
-    
-    private func fetchCharactersInitial() async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
         let endpoint = Endpoint(path: .character, queryParameters: [:], method: .get)
         let result = await httpClient.makeRequest(directUrl: nil, endpoint: endpoint)
-        return handleResult(result)
-    }
-
-    private func fetchCharacters(directUrl: String) async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
-        let endpoint = Endpoint(path: .empty, queryParameters: [:], method: .get)
-        let result = await httpClient.makeRequest(directUrl: directUrl, endpoint: endpoint)
         return handleResult(result)
     }
 
