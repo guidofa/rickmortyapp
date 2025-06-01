@@ -16,8 +16,8 @@ final class CharactersListViewModel: ObservableObject {
     @Published var state = ViewState.loaded
 
     private var nextPage: String?
-    private var characters = [CharacterEntity]()
     private var prevPage: String?
+    private var characters = [CharacterEntity]()
 
     // MARK: - Public Enums
 
