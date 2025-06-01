@@ -40,9 +40,11 @@ struct CharactersListView: View {
                                     CharacterView(character: character)
                                 }
 
-                                CharactersLoadMoreView {
-                                    Task { [weak viewModel] in
-                                        await viewModel?.trigger(.fetchCharacters)
+                                if !viewModel.isLastPage {
+                                    CharactersLoadMoreView {
+                                        Task { [weak viewModel] in
+                                            await viewModel?.trigger(.fetchCharacters)
+                                        }
                                     }
                                 }
                             }
