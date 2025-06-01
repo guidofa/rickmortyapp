@@ -23,8 +23,8 @@ final class CharactersRepository: CharactersRepositoryType {
         self.errorMapper = charactersDomainErrorMapper
     }
     
-    func fetchCharacters() async -> Result<PageCharactersEntity, CharactersDomainError> {
-        let pageCharactersResult = await apiDatasource.fetchCharacters()
+    func fetchCharacters(nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError> {
+        let pageCharactersResult = await apiDatasource.fetchCharacters(nextPage: nextPage)
         
         guard case .success(let pageCharacters) = pageCharactersResult else {
             return .failure(errorMapper.map(error: pageCharactersResult.failureValue as? HTTPClientErrorEnum))

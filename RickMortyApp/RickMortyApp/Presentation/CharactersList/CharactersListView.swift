@@ -39,6 +39,12 @@ struct CharactersListView: View {
                                 ForEach(viewModel.charactersListToShow) { character in
                                     CharacterView(character: character)
                                 }
+
+                                CharactersLoadMoreView {
+                                    Task { [weak viewModel] in
+                                        await viewModel?.trigger(.fetchCharacters)
+                                    }
+                                }
                             }
                             
                             if viewModel.state == .loading {

@@ -14,6 +14,8 @@ final class CharactersListViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var state = ViewState.loaded
 
+    private var nextPage: String?
+
     // MARK: - Public Enums
 
     enum TriggerAction {
@@ -60,12 +62,14 @@ final class CharactersListViewModel: ObservableObject {
     private func fetchCharactersList() async {
         await setViewState(state: .loading)
 
-        let result = await fetchCharactersUseCase.execute()
+        let result = await fetchCharactersUseCase.execute(nextPage: nextPage)
 
         guard case .success(let page) = result else {
             await handleError(error: result.failureValue as? CharactersDomainError)
             return
         }
+
+        self.nextPage = page.next
         
         await setViewState(state: .loaded)
 
