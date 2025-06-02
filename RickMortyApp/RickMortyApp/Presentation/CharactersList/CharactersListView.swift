@@ -55,9 +55,10 @@ struct CharactersListView: View {
                         .listStyle(.plain)
                         .scrollDismissesKeyboard(.immediately)
                         .searchable(text: $searchText, prompt: .searchPlaceholder)
-                        .onSubmit(of: .search) {
-                            Task {
-                                await viewModel.trigger(.searchCharacter(searchText))
+                        .onSubmit(of: .search) { performSearch() }
+                        .onChange(of: searchText) { _, newValue in
+                            if newValue.isEmpty {
+                                performSearch()
                             }
                         }
                         
@@ -74,6 +75,18 @@ struct CharactersListView: View {
         }
         .task { [weak viewModel] in
             await viewModel?.trigger(.fetchCharacters)
+        }
+    }
+
+    private func performFetchCharacters() {
+        Task { [weak viewModel] in
+            await viewModel?.trigger(.fetchCharacters)
+        }
+    }
+
+    private func performSearch() {
+        Task { [weak viewModel] in
+            await viewModel?.trigger(.searchCharacter(searchText))
         }
     }
 }
