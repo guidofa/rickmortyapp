@@ -27,9 +27,7 @@ struct CharactersListView: View {
             VStack(spacing: .zero) {
                 if let errorMessage = viewModel.errorMessage {
                     CharactersListBlockingErrorView(errorMessage: errorMessage) {
-                        Task { [weak viewModel] in
-                            await viewModel?.trigger(.fetchCharacters)
-                        }
+                        performFetchCharacters()
                     }
                 } else {
                     ZStack {
@@ -45,9 +43,7 @@ struct CharactersListView: View {
 
                                 if !viewModel.isLastPage && searchText.isEmpty {
                                     CharactersLoadMoreView {
-                                        Task { [weak viewModel] in
-                                            await viewModel?.trigger(.fetchCharacters)
-                                        }
+                                        performFetchCharacters()
                                     }
                                 }
                             }
@@ -73,8 +69,8 @@ struct CharactersListView: View {
             }
             .navigationTitle(.appTitle)
         }
-        .task { [weak viewModel] in
-            await viewModel?.trigger(.fetchCharacters)
+        .onAppear {
+            performFetchCharacters()
         }
     }
 
