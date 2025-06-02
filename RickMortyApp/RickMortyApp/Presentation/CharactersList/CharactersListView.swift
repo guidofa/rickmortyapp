@@ -34,15 +34,6 @@ struct CharactersListView: View {
                 } else {
                     ZStack {
                         List {
-                            SearchView(
-                                searchText: $searchText,
-                                placeholder: .searchPlaceholder
-                            ) {
-                                Task { [weak viewModel] in
-                                    await viewModel?.trigger(.searchCharacter(searchText))
-                                }
-                            }
-
                             if viewModel.charactersListToShow.isEmpty {
                                 Text(.emptyStateMessage)
                                     .foregroundStyle(.primary)
@@ -63,6 +54,12 @@ struct CharactersListView: View {
                         }
                         .listStyle(.plain)
                         .scrollDismissesKeyboard(.immediately)
+                        .searchable(text: $searchText, prompt: .searchPlaceholder)
+                        .onSubmit(of: .search) {
+                            Task {
+                                await viewModel.trigger(.searchCharacter(searchText))
+                            }
+                        }
                         
                         if viewModel.state == .loading {
                             Color.black.opacity(.opacity)
