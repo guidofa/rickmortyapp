@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchCharactersUseCaseType {
-    func execute(nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError>
+    func execute(filterStatus: CharacterStatusEnum, nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError>
 }
 
 final class FetchCharactersUseCase: FetchCharactersUseCaseType {
@@ -23,8 +23,8 @@ final class FetchCharactersUseCase: FetchCharactersUseCaseType {
         self.repository = repository
     }
     
-    func execute(nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError> {
-        let result = await repository.fetchCharacters(nextPage: nextPage)
+    func execute(filterStatus: CharacterStatusEnum, nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError> {
+        let result = await repository.fetchCharacters(filterStatus: filterStatus, nextPage: nextPage)
 
         guard let characters = try? result.get() else {
             return .failure(charactersDomainErrorMapper.map(error: result.failureValue as? HTTPClientErrorEnum))

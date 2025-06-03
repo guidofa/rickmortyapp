@@ -19,10 +19,8 @@ final class CharactersListViewModel: ObservableObject {
     private var prevPage: String?
     private var characters = [CharacterEntity]()
 
-    // MARK: - Public Enums
-
     enum TriggerAction {
-        case fetchCharacters
+        case fetchCharacters(CharacterStatusEnum)
         case searchCharacter(String)
     }
 
@@ -56,20 +54,26 @@ final class CharactersListViewModel: ObservableObject {
         await resetError()
 
         switch action {
-        case .fetchCharacters:
-            await fetchCharactersList()
-
+        case .fetchCharacters(let filter):
+            await fetchCharactersList(filter: filter)
+            
         case .searchCharacter(let searchText):
             await searchCharacter(searchText: searchText)
         }
     }
 
+    func reset() {
+        nextPage = nil
+        prevPage = nil
+        characters.removeAll()
+    }
+
     // MARK: - Private functions
 
-    private func fetchCharactersList() async {
+    private func fetchCharactersList(filter: CharacterStatusEnum) async {
         await setViewState(state: .loading)
 
-        let result = await fetchCharactersUseCase.execute(nextPage: nextPage)
+        let result = await fetchCharactersUseCase.execute(filterStatus: filter, nextPage: nextPage)
 
         guard case .success(let page) = result else {
             await handleError(error: result.failureValue as? CharactersDomainError)

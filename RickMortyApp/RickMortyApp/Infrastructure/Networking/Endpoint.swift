@@ -8,7 +8,7 @@
 import Foundation
 
 struct Endpoint {
+    let method: HTTPMethodEnum
     let path: String
     let queryParameters: [String: Any]
-    let method: HTTPMethodEnum
 }

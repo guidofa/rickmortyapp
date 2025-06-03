@@ -7,8 +7,9 @@
 
 import Foundation
 
-enum CharacterStatusEnum: String, Codable {
+enum CharacterStatusEnum: String {
     case alive = "Alive"
+    case all = "All"
     case dead = "Dead"
-    case unknown = "unknown"
+    case unknown = "Unknown"
 }

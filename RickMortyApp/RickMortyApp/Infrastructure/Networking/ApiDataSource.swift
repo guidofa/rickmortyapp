@@ -10,6 +10,7 @@ import Foundation
 private extension String {
     static var character: Self { "character" }
     static var empty: Self { "" }
+    static var status: Self { "status" }
 }
 
 final class ApiDataSource: ApiDatasourceType {
@@ -19,13 +20,19 @@ final class ApiDataSource: ApiDatasourceType {
         self.httpClient = httpClient
     }
     
-    func fetchCharacters(nextPage: String?) async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
+    func fetchCharacters(filterStatus: CharacterStatusEnum, nextPage: String?) async -> Result<CharacterPageDTO, HTTPClientErrorEnum> {
         let result: Result<Data, HTTPClientErrorEnum>
 
         if let nextPage {
             result = await httpClient.makeRequest(directUrl: nextPage, endpoint: nil)
         } else {
-            let endpoint = Endpoint(path: .character, queryParameters: [:], method: .get)
+            var queryParameters = [String: Any]()
+
+            if filterStatus != .all {
+                queryParameters[.status] = filterStatus
+            }
+
+            let endpoint = Endpoint(method: .get, path: .character, queryParameters: queryParameters)
             result = await httpClient.makeRequest(directUrl: nil, endpoint: endpoint)
         }
 

@@ -52,7 +52,7 @@ struct CharacterInfoView: View {
 
     private func getStatusColor(status: CharacterStatusEnum) -> Color {
         switch status {
-        case .alive: return .green
+        case .alive, .all: return .green
         case .dead: return .red
         case .unknown: return .gray
         }

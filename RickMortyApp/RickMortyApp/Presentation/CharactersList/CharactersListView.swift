@@ -21,29 +21,50 @@ struct CharactersListView: View {
     @ObservedObject var viewModel: CharactersListViewModel
 
     @State private var searchText: String = ""
+    @State private var selectedFilter: CharacterStatusEnum = .all
 
     var body: some View {
         NavigationStack {
             VStack(spacing: .zero) {
                 if let errorMessage = viewModel.errorMessage {
                     CharactersListBlockingErrorView(errorMessage: errorMessage) {
-                        performFetchCharacters()
+                        performFetchCharacters(filter: .all)
                     }
                 } else {
                     ZStack {
                         List {
+                            Picker(.appTitle, selection: $selectedFilter) {
+                                Text(CharacterStatusEnum.all.rawValue)
+                                    .tag(CharacterStatusEnum.all)
+
+                                Text(CharacterStatusEnum.alive.rawValue)
+                                    .tag(CharacterStatusEnum.alive)
+
+                                Text(CharacterStatusEnum.dead.rawValue)
+                                    .tag(CharacterStatusEnum.dead)
+
+                                Text(CharacterStatusEnum.unknown.rawValue)
+                                    .tag(CharacterStatusEnum.unknown)
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .onChange(of: selectedFilter) { _, newValue in
+                                searchText = ""
+                                viewModel.reset()
+                                performFetchCharacters(filter: newValue)
+                            }
+                            
                             if viewModel.charactersListToShow.isEmpty {
                                 Text(.emptyStateMessage)
                                     .foregroundStyle(.primary)
                                     .font(.headline)
-                            }  else {
+                            } else {
                                 ForEach(viewModel.charactersListToShow) { character in
                                     CharacterView(character: character)
                                 }
-
+                                
                                 if !viewModel.isLastPage && searchText.isEmpty {
                                     CharactersLoadMoreView {
-                                        performFetchCharacters()
+                                        performFetchCharacters(filter: selectedFilter)
                                     }
                                 }
                             }
@@ -70,13 +91,13 @@ struct CharactersListView: View {
             .navigationTitle(.appTitle)
         }
         .onAppear {
-            performFetchCharacters()
+            performFetchCharacters(filter: .all)
         }
     }
 
-    private func performFetchCharacters() {
+    private func performFetchCharacters(filter: CharacterStatusEnum) {
         Task { [weak viewModel] in
-            await viewModel?.trigger(.fetchCharacters)
+            await viewModel?.trigger(.fetchCharacters(filter))
         }
     }
 

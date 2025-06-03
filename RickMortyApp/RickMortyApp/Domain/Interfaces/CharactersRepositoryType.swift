@@ -8,5 +8,5 @@
 import Foundation
 
 protocol CharactersRepositoryType {
-    func fetchCharacters(nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError>
+    func fetchCharacters(filterStatus: CharacterStatusEnum, nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError>
 }

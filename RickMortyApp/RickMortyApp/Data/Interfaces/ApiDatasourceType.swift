@@ -8,5 +8,5 @@
 import Foundation
 
 protocol ApiDatasourceType {
-    func fetchCharacters(nextPage: String?) async -> Result<CharacterPageDTO, HTTPClientErrorEnum>
+    func fetchCharacters(filterStatus: CharacterStatusEnum, nextPage: String?) async -> Result<CharacterPageDTO, HTTPClientErrorEnum>
 }
