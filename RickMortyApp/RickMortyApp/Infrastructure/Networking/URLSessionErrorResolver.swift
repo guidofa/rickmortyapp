@@ -12,10 +12,13 @@ final class URLSessionErrorResolver {
         switch statusCode {
         case 429:
             return .tooManyRequests
+
         case 400..<500:
             return .clientError
+
         case 500..<600:
             return .serverError
+
         default:
             return .generic
         }
