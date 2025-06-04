@@ -32,7 +32,8 @@ final class CharactersListFactory {
         return CharactersRepository(
             apiDatasource: createDataSource(),
             charactersDomainErrorMapper: .init(),
-            charactersDomainMapper: .init()
+            charactersDomainMapper: .init(),
+            inMemoryCache: InMemoryCache.shared
         )
     }
 

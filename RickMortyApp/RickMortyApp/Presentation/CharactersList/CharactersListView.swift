@@ -122,7 +122,8 @@ struct CharactersListView: View {
                         )
                     ),
                     charactersDomainErrorMapper: .init(),
-                    charactersDomainMapper: .init()
+                    charactersDomainMapper: .init(),
+                    inMemoryCache: InMemoryCache.shared
                 )
             )
         )
