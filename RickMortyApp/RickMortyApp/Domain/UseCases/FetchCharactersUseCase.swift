@@ -26,10 +26,12 @@ final class FetchCharactersUseCase: FetchCharactersUseCaseType {
     func execute(filterStatus: CharacterStatusEnum, nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError> {
         let result = await repository.fetchCharacters(filterStatus: filterStatus, nextPage: nextPage)
 
-        guard let characters = try? result.get() else {
-            return .failure(charactersDomainErrorMapper.map(error: result.failureValue as? HTTPClientErrorEnum))
-        }
+        switch result {
+        case .success(let page):
+            return .success(page)
 
-        return .success(characters)
+        case .failure(let error):
+            return .failure(error)
+        }
     }
 }
