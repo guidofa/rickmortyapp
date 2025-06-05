@@ -23,6 +23,8 @@ struct CharactersListView: View {
     @State private var searchText: String = ""
     @State private var selectedFilter: CharacterStatusEnum = .all
 
+    let characterDetailFactory: CharacterDetailFactoryType
+
     var body: some View {
         NavigationStack {
             VStack(spacing: .zero) {
@@ -59,7 +61,13 @@ struct CharactersListView: View {
                                     .font(.headline)
                             } else {
                                 ForEach(viewModel.charactersListToShow) { character in
-                                    CharacterView(character: character)
+                                    NavigationLink {
+                                        characterDetailFactory.create(character: character)
+                                    } label: {
+                                        CharacterView(
+                                            character: character
+                                        )
+                                    }
                                 }
                                 
                                 if !viewModel.isLastPage && searchText.isEmpty {
@@ -126,6 +134,7 @@ struct CharactersListView: View {
                     inMemoryCache: InMemoryCache.shared
                 )
             )
-        )
+        ),
+        characterDetailFactory: CharacterDetailFactory()
     )
 }

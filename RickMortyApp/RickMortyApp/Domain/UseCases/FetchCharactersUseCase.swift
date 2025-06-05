@@ -24,14 +24,6 @@ final class FetchCharactersUseCase: FetchCharactersUseCaseType {
     }
     
     func execute(filterStatus: CharacterStatusEnum, nextPage: String?) async -> Result<PageCharactersEntity, CharactersDomainError> {
-        let result = await repository.fetchCharacters(filterStatus: filterStatus, nextPage: nextPage)
-
-        switch result {
-        case .success(let page):
-            return .success(page)
-
-        case .failure(let error):
-            return .failure(error)
-        }
+        await repository.fetchCharacters(filterStatus: filterStatus, nextPage: nextPage)
     }
 }
