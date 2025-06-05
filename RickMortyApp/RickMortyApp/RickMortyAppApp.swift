@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct RickMortyAppApp: App {
+    private let favoritesStateHolder = FavoritesStateHolder()
+
     var body: some Scene {
         WindowGroup {
-            CharactersListFactory.create()
+            ContentView(
+                characterListView: CharactersListFactory.create(),
+                favoritesCharactersView: FavoritesCharactersView()
+            )
+            .environmentObject(favoritesStateHolder)
         }
     }
 }

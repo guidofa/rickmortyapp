@@ -18,6 +18,8 @@ private extension LocalizedStringKey {
 }
 
 struct CharactersListView: View {
+    @EnvironmentObject var favoritesStateHolder: FavoritesStateHolder
+
     @ObservedObject var viewModel: CharactersListViewModel
 
     @State private var searchText: String = ""
@@ -30,7 +32,16 @@ struct CharactersListView: View {
             VStack(spacing: .zero) {
                 if let errorMessage = viewModel.errorMessage {
                     CharactersListBlockingErrorView(errorMessage: errorMessage) {
-                        performFetchCharacters(filter: .all)
+                        favoritesStateHolder
+                            .toggleFavorite(
+                                .init(
+                                    id: 0,
+                                    gender: .male,
+                                    imageURL: .init(string: ""),
+                                    name: "Rick",
+                                    status: .alive
+                                )
+                            )
                     }
                 } else {
                     ZStack {
