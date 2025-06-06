@@ -17,7 +17,6 @@ struct CharacterProfilePic: View {
             .cancelOnDisappear(true)
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(width: .profilePicDiameter, height: .profilePicDiameter)
             .clipShape(Circle())
             .overlay(Circle().stroke(.primary, lineWidth: .overlayLineWidth))
             .shadow(radius: .smallPadding)

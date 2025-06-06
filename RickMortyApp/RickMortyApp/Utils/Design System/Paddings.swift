@@ -17,4 +17,5 @@ extension CGFloat {
     static var cornerRadius: Self { 8 }
     static var overlayLineWidth: Self { 1 }
     static var profilePicDiameter: Self { 60 }
+    static var profilePicDiameterExtra: Self { 240 }
 }

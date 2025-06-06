@@ -19,6 +19,7 @@ struct CharacterView: View {
             CharacterProfilePic(
                 imageURL: character.imageURL
             )
+            .frame(width: .profilePicDiameter, height: .profilePicDiameter)
             
             CharacterInfoView(
                 name: character.name,
