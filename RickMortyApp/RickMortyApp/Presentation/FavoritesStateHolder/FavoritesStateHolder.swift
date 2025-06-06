@@ -17,4 +17,8 @@ final class FavoritesStateHolder: ObservableObject {
             favorites.append(character)
         }
     }
+
+    func isFavorite(id: Int) -> Bool {
+        favorites.contains(where: { $0.id == id })
+    }
 }

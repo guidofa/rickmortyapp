@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  TabContentView.swift
 //  RickMortyApp
 //
 //  Created by Guido Fabio on 5/6/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct TabContentView: View {
     @EnvironmentObject var favoritesStateHolder: FavoritesStateHolder
 
     let characterListView: CharactersListView

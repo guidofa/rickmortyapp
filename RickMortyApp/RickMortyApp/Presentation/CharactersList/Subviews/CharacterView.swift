@@ -10,6 +10,9 @@ import SwiftUI
 
 struct CharacterView: View {
     let character: CharacterEntity
+    let isFavorite: Bool
+
+    let action: () -> Void
 
     var body: some View {
         HStack(spacing: .mediumPadding) {
@@ -20,7 +23,9 @@ struct CharacterView: View {
             CharacterInfoView(
                 name: character.name,
                 gender: character.gender,
-                status: character.status
+                isFavorite: isFavorite,
+                status: character.status,
+                action: action
             )
         }
     }
@@ -34,6 +39,8 @@ struct CharacterView: View {
             imageURL: nil,
             name: "Rick",
             status: .alive
-        )
+        ),
+        isFavorite: true,
+        action: {}
     )
 }

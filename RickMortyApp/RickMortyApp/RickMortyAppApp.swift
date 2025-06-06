@@ -13,7 +13,7 @@ struct RickMortyAppApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(
+            TabContentView(
                 characterListView: CharactersListFactory.create(),
                 favoritesCharactersView: FavoritesCharactersView()
             )

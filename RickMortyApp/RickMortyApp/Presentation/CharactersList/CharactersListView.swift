@@ -32,16 +32,9 @@ struct CharactersListView: View {
             VStack(spacing: .zero) {
                 if let errorMessage = viewModel.errorMessage {
                     CharactersListBlockingErrorView(errorMessage: errorMessage) {
-                        favoritesStateHolder
-                            .toggleFavorite(
-                                .init(
-                                    id: 0,
-                                    gender: .male,
-                                    imageURL: .init(string: ""),
-                                    name: "Rick",
-                                    status: .alive
-                                )
-                            )
+                        Task { [weak viewModel] in
+                            await viewModel?.trigger(.fetchCharacters(.all))
+                        }
                     }
                 } else {
                     ZStack {
@@ -68,16 +61,19 @@ struct CharactersListView: View {
                             
                             if viewModel.charactersListToShow.isEmpty {
                                 Text(.emptyStateMessage)
-                                    .foregroundStyle(.primary)
                                     .font(.headline)
+                                    .foregroundStyle(.primary)
                             } else {
                                 ForEach(viewModel.charactersListToShow) { character in
                                     NavigationLink {
                                         characterDetailFactory.create(character: character)
                                     } label: {
                                         CharacterView(
-                                            character: character
-                                        )
+                                            character: character,
+                                            isFavorite: favoritesStateHolder.isFavorite(id: character.id)
+                                        ) {
+                                            favoritesStateHolder.toggleFavorite(character)
+                                        }
                                     }
                                 }
                                 
@@ -110,7 +106,9 @@ struct CharactersListView: View {
             .navigationTitle(.appTitle)
         }
         .onAppear {
-            performFetchCharacters(filter: .all)
+            if viewModel.charactersListToShow.isEmpty {
+                performFetchCharacters(filter: .all)
+            }
         }
     }
 

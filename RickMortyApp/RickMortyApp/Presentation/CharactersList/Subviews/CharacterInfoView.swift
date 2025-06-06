@@ -12,33 +12,50 @@ private extension String {
     static var genderIconMale: Self { "♂︎" }
     static var genderlessIcon: Self { "⚲" }
     static var genderUnknownIcon: Self { "?" }
+    static var heart: Self { "heart" }
+    static var heartFill: Self { "heart.fill" }
 }
 
 struct CharacterInfoView: View {
     let name: String
     let gender: CharacterGenderEnum
+    let isFavorite: Bool
     let status: CharacterStatusEnum
 
+    let action: () -> Void
+
     var body: some View {
-        VStack(alignment: .leading, spacing: .smallPadding) {
-            Text(name)
-                .font(.headline)
+        HStack {
+            VStack(alignment: .leading, spacing: .smallPadding) {
+                Text(name)
+                    .font(.headline)
 
-            HStack(spacing: .mediumPadding) {
-                HStack(spacing: .smallPadding) {
-                    Circle()
-                        .fill(getStatusColor(status: status))
-                        .frame(width: .mediumPadding, height: .mediumPadding)
-                    
-                    Text(status.rawValue.capitalized)
+                HStack(spacing: .mediumPadding) {
+                    HStack(spacing: .smallPadding) {
+                        Circle()
+                            .fill(getStatusColor(status: status))
+                            .frame(width: .mediumPadding, height: .mediumPadding)
+                        
+                        Text(status.rawValue.capitalized)
+                    }
+
+                    Text(getGenderIcon(gender: gender))
                 }
-
-                Text(getGenderIcon(gender: gender))
+                .font(.subheadline)
             }
-            .font(.subheadline)
+            .foregroundStyle(.primary)
+            .padding(.horizontal, .smallPadding)
+
+            Spacer(minLength: .mediumPadding)
+
+            Button {
+                action()
+            } label: {
+                Image(systemName: isFavorite ? .heartFill : .heart)
+            }
+            .buttonStyle(.borderless)
+            .padding(.extraLargePadding)
         }
-        .foregroundStyle(.primary)
-        .padding(.horizontal, .smallPadding)
     }
 
     private func getGenderIcon(gender: CharacterGenderEnum) -> String {
@@ -63,6 +80,8 @@ struct CharacterInfoView: View {
     CharacterInfoView(
         name: "Rick",
         gender: .male,
-        status: .alive
+        isFavorite: true,
+        status: .alive,
+        action: {}
     )
 }
