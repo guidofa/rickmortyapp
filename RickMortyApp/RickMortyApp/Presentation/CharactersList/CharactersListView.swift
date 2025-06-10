@@ -38,61 +38,12 @@ struct CharactersListView: View {
                     }
                 } else {
                     ZStack {
-                        List {
-                            Picker(.appTitle, selection: $selectedFilter) {
-                                Text(CharacterStatusEnum.all.rawValue)
-                                    .tag(CharacterStatusEnum.all)
-
-                                Text(CharacterStatusEnum.alive.rawValue)
-                                    .tag(CharacterStatusEnum.alive)
-
-                                Text(CharacterStatusEnum.dead.rawValue)
-                                    .tag(CharacterStatusEnum.dead)
-
-                                Text(CharacterStatusEnum.unknown.rawValue)
-                                    .tag(CharacterStatusEnum.unknown)
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .onChange(of: selectedFilter) { _, newValue in
-                                searchText = ""
-                                viewModel.reset()
-                                performFetchCharacters(filter: newValue)
-                            }
-                            
-                            if viewModel.charactersListToShow.isEmpty {
-                                Text(.emptyStateMessage)
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                            } else {
-                                ForEach(viewModel.charactersListToShow) { character in
-                                    NavigationLink {
-                                        characterDetailFactory.create(character: character)
-                                    } label: {
-                                        CharacterView(
-                                            character: character,
-                                            isFavorite: favoritesStateHolder.isFavorite(id: character.id)
-                                        ) {
-                                            favoritesStateHolder.toggleFavorite(character)
-                                        }
-                                    }
-                                }
-                                
-                                if !viewModel.isLastPage && searchText.isEmpty {
-                                    CharactersLoadMoreView {
-                                        performFetchCharacters(filter: selectedFilter)
-                                    }
-                                }
-                            }
-                        }
-                        .listStyle(.plain)
-                        .scrollDismissesKeyboard(.immediately)
-                        .searchable(text: $searchText, prompt: .searchPlaceholder)
-                        .onSubmit(of: .search) { performSearch() }
-                        .onChange(of: searchText) { _, newValue in
-                            if newValue.isEmpty {
-                                performSearch()
-                            }
-                        }
+                        CharactersListComponentView(
+                            searchText: $searchText,
+                            selectedFilter: $selectedFilter,
+                            characterDetailFactory: characterDetailFactory
+                        )
+                        .environmentObject(viewModel)
                         
                         if viewModel.state == .loading {
                             Color.black.opacity(.opacity)
@@ -105,22 +56,9 @@ struct CharactersListView: View {
             }
             .navigationTitle(.appTitle)
         }
-        .onAppear {
-            if viewModel.charactersListToShow.isEmpty {
-                performFetchCharacters(filter: .all)
-            }
-        }
-    }
-
-    private func performFetchCharacters(filter: CharacterStatusEnum) {
-        Task { [weak viewModel] in
-            await viewModel?.trigger(.fetchCharacters(filter))
-        }
-    }
-
-    private func performSearch() {
-        Task { [weak viewModel] in
-            await viewModel?.trigger(.searchCharacter(searchText))
+        .task { [weak viewModel] in
+            guard let viewModel, viewModel.charactersListToShow.isEmpty else { return }
+            await viewModel.trigger(.fetchCharacters(.all))
         }
     }
 }

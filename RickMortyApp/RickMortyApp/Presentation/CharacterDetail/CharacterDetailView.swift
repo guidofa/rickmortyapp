@@ -19,14 +19,47 @@ struct CharacterDetailView: View {
                 CharacterProfilePic(imageURL: viewModel.character.imageURL)
                     .frame(width: .profilePicDiameterExtra, height: .profilePicDiameterExtra)
 
-                VStack(spacing: .mediumPadding) {
-                    Text(viewModel.character.gender.rawValue)
-                        
-                    Text(viewModel.character.status.rawValue)
-                }
-                .font(.subheadline)
+                CharacterDetailInfoView(
+                    gender: viewModel.character.gender.rawValue,
+                    status: viewModel.character.status.rawValue
+                )
             }
             .foregroundStyle(.primary)
+        }
+    }
+}
+
+private struct CharacterDetailInfoView: View {
+    let gender: String
+    let status: String
+    
+    var body: some View {
+        VStack(spacing: .mediumPadding) {
+            InfoView(
+                title: "Gender: ",
+                value: gender
+            )
+
+            InfoView(
+                title: "Status: ",
+                value: status
+            )
+        }
+        .foregroundStyle(.primary)
+    }
+}
+
+private struct InfoView: View {
+    let title: String
+    let value: String
+
+    var body: some View {
+        HStack(spacing: .mediumPadding) {
+            Text(title)
+                .font(.headline)
+
+            Text(value)
+                .font(.subheadline)
         }
     }
 }
