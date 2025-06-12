@@ -54,6 +54,16 @@ Data is fetched from the [Rick and Morty API](https://rickandmortyapi.com/api/ch
 
 ---
 
+## 📸 Screenshots
+
+<img width="534" alt="Screenshot 2025-06-12 at 12 06 29" src="https://github.com/user-attachments/assets/a6fb9e6c-b892-47de-9bbf-c27e97b74e7d" />
+<img width="534" alt="Screenshot 2025-06-12 at 12 06 26" src="https://github.com/user-attachments/assets/0805dcfc-45f8-4dea-a09f-f51fcfcfa5d4" />
+<img width="534" alt="Screenshot 2025-06-12 at 12 06 21" src="https://github.com/user-attachments/assets/0a956604-4a1a-4fa7-a4ed-e46f9de20a4d" />
+<img width="534" alt="Screenshot 2025-06-12 at 12 06 10" src="https://github.com/user-attachments/assets/eca6a971-202b-42b0-be16-c1c51c000edf" />
+<img width="534" alt="Screenshot 2025-06-12 at 12 06 04" src="https://github.com/user-attachments/assets/08d0bcc4-060e-44b8-a791-9e943ece4c2d" />
+<img width="534" alt="Screenshot 2025-06-12 at 12 05 59" src="https://github.com/user-attachments/assets/b727e8ab-1bbe-4fe6-a106-22799932978e" />
+
+
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
